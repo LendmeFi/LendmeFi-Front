@@ -1,7 +1,5 @@
 # Welcome to LendmeFi
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
-
 Nfts Borrowing and Lending protocol on [Scroll](https://https://twitter.com/Scroll_ZKP)
 
 ## Technologies Used
