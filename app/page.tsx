@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 
 "use client";
 
->>>>>>> 635da287330fd1d6059ed4629029811609da1572
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
@@ -13,8 +10,6 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
-<<<<<<< HEAD
-=======
 
 import { useState } from "react";
 import { useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
@@ -110,7 +105,6 @@ function LoansComponent() {
   );
 };
 
->>>>>>> 635da287330fd1d6059ed4629029811609da1572
 export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -121,10 +115,7 @@ export default function Home() {
         <h2 className={subtitle({ class: "mt-4" })}>
           Beautiful, fast and modern way borrow nft.
         </h2>
-<<<<<<< HEAD
-=======
         <LoansComponent />
->>>>>>> 635da287330fd1d6059ed4629029811609da1572
       </div>
     </section>
   );
