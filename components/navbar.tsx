@@ -40,7 +40,6 @@ export const Navbar = () => {
   const { open } = useWeb3Modal();
   const { walletInfo } = useWalletInfo();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
-
   const handleKeyDown = (event) => {
     if (event.ctrlKey && event.key === "k") {
       event.preventDefault();

@@ -9,11 +9,11 @@ export const projectId = "20bc8a396f156e979d8de9c456ed840b";
 
 // 2. Set chains
 const mainnet = {
-  chainId: 1,
-  name: "Ethereum",
+  chainId: 534351,
+  name: "Scroll Sepolia Network",
   currency: "ETH",
-  explorerUrl: "https://etherscan.io",
-  rpcUrl: "https://cloudflare-eth.com",
+  explorerUrl: "https://sepolia.scrollscan.com/",
+  rpcUrl: "https://sepolia-rpc.scroll.io/",
 };
 
 // 3. Create a metadata object
