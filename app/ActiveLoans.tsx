@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/react';
 import { BrowserProvider, Contract, toNumber } from 'ethers';
 import { ethers } from "ethers";
@@ -50,15 +50,13 @@ const ActiveLoans: React.FC = () => {
     });
   }
 
+  useEffect(() => {
+    getLoans();
+  }, [isConnected, walletProvider]); // Dependencies to ensure it runs when connection or provider changes
+
   return (
     <div className="p-4">
-      <button
-        onClick={getLoans}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Active Loans
-      </button>
-      {activeLoanByID && (
+      {activeLoanByID ? (
         <div className="mt-4 p-4 border rounded shadow-lg">
           <h2 className="text-xl font-bold mb-2">Active Loan Details</h2>
           <p><strong>Loan ID:</strong> {activeLoanByID.loanId}</p>
@@ -73,6 +71,8 @@ const ActiveLoans: React.FC = () => {
           <p><strong>Loan Start Time:</strong> {new Date(activeLoanByID.loanStartTime * 1000).toLocaleString()}</p>
           <p><strong>Loan Duration:</strong> {activeLoanByID.loanDuration / 3600} hours</p>
         </div>
+      ) : (
+        <p>Loading active loans...</p>
       )}
     </div>
   );

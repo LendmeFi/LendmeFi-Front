@@ -30,21 +30,14 @@ import {
   TwitterIcon,
   GithubIcon,
   DiscordIcon,
-  SearchIcon,
   Logo,
 } from "@/components/icons";
 import { Console } from "console";
 
-// SearchBar
 export const Navbar = () => {
   const { open } = useWeb3Modal();
   const { walletInfo } = useWalletInfo();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
-  const handleKeyDown = (event) => {
-    if (event.ctrlKey && event.key === "k") {
-      event.preventDefault();
-    }
-  };
 
   const handleClick = async () => {
     const provider = await Web3Modal.connect() as any;
@@ -56,33 +49,6 @@ export const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -127,7 +93,7 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+
         <NavbarItem className="hidden md:flex">
           <Button
             className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700"
@@ -150,22 +116,9 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu>
-        {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item.label}-${index}`}>
-              <NextLink
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                }
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
             </NavbarMenuItem>
           ))}
         </div>
