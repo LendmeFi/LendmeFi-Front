@@ -52,7 +52,6 @@ export const Navbar = () => {
       const web3Provider = new ethers.providers.Web3Provider(provider);
       const signer = web3Provider.getSigner();
       const address = await signer.getAddress();
-      console.log(address);
     }
   };
 
