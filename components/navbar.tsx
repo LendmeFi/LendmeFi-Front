@@ -17,7 +17,13 @@ import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { useState, useRef, useEffect } from "react";
-
+import Web3Modal from "@/context/Web3Modal";
+import { ethers } from "ethers";
+import {
+  useWalletInfo,
+  useWeb3Modal,
+  useWeb3ModalAccount,
+} from "@web3modal/ethers/react";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
@@ -30,30 +36,35 @@ import {
 
 // SearchBar
 export const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const searchInputRef = useRef(null);
-
-  const handleMenuClose = () => {
-    setIsMenuOpen(false);
+  const { open } = useWeb3Modal();
+  const { walletInfo } = useWalletInfo();
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
+  
+  const handleKeyDown = (event) => {
+    if (event.ctrlKey && event.key === "k") {
+      event.preventDefault();
+    }
   };
 
-  const handleKeyDown = (event) => {
-    if (event.ctrlKey && event.key === 'k') {
-      event.preventDefault();
-      searchInputRef.current.focus();
+  const handleClick = async () => {
+    const provider = await Web3Modal.connect();
+    if (provider) {
+      const web3Provider = new ethers.providers.Web3Provider(provider);
+      const signer = web3Provider.getSigner();
+      const address = await signer.getAddress();
+      console.log(address);
     }
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   const searchInput = (
     <Input
-      ref={searchInputRef}
       aria-label="Search"
       classNames={{
         inputWrapper: "bg-default-100",
@@ -119,13 +130,13 @@ export const Navbar = () => {
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
-            isExternal
-            as={Link}
             className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700"
-            href={siteConfig.links.sponsor}
             variant="flat"
+            onClick={() => {
+              open();
+            }}
           >
-            Connect Wallet
+            {isConnected ? address : "Connect Wallet"}
           </Button>
         </NavbarItem>
       </NavbarContent>
@@ -148,11 +159,10 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
+                      ? "danger"
+                      : "foreground"
                 }
                 href={item.href}
-                size="lg"
               >
                 {item.label}
               </NextLink>
