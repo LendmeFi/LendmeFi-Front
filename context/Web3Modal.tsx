@@ -32,7 +32,7 @@ const ethersConfig = defaultConfig({
   /*Optional*/
   enableEIP6963: true, // true by default
   enableInjected: true, // true by default
-  enableCoinbase: true, // true by default
+  enableCoinbase: false, // true by default
   rpcUrl: "...", // used for the Coinbase SDK
   defaultChainId: 1, // used for the Coinbase SDK
 });
@@ -43,8 +43,9 @@ createWeb3Modal({
   ethersConfig,
   chains: [mainnet],
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
-  enableOnramp: true, // Optional - false as default
+  enableAnalytics: false, // Optional - defaults to your Cloud configuration
+  enableOnramp: false, // Optional - false as default
+  enableSwaps: false,
 });
 // eslint-disable-next-line prettier/prettier
 

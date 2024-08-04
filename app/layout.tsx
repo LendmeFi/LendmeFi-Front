@@ -52,8 +52,8 @@ export default function RootLayout({
               <Link
                 isExternal
                 className="flex items-center gap-1 text-current"
-                href="https://nextui.org" // website link
-                title="nextui.org homepage"
+                href="" // website link
+                title="Homepage"
               >
                 <p className="text-primary">Balon Traders</p>
               </Link>

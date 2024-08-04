@@ -33,13 +33,14 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { Console } from "console";
 
 // SearchBar
 export const Navbar = () => {
   const { open } = useWeb3Modal();
   const { walletInfo } = useWalletInfo();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
-  
+
   const handleKeyDown = (event) => {
     if (event.ctrlKey && event.key === "k") {
       event.preventDefault();
@@ -47,12 +48,12 @@ export const Navbar = () => {
   };
 
   const handleClick = async () => {
-    const provider = await Web3Modal.connect();
+    const provider = await Web3Modal.connect() as any;
     if (provider) {
-      const web3Provider = new ethers.providers.Web3Provider(provider);
+      const web3Provider = new (ethers.providers as any).Web3Provider(provider);
       const signer = web3Provider.getSigner();
       const address = await signer.getAddress();
-      console.log(address);
+      const shortenedAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
     }
   };
 
@@ -136,7 +137,7 @@ export const Navbar = () => {
               open();
             }}
           >
-            {isConnected ? address : "Connect Wallet"}
+            {isConnected ? `${address.slice(0, 6)}...${address.slice(-3)}` : "Connect Wallet"}
           </Button>
         </NavbarItem>
       </NavbarContent>
