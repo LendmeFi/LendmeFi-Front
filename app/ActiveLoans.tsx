@@ -24,15 +24,12 @@ const ActiveLoans: React.FC = () => {
   const [activeLoanByID, setActiveLoanByID] = useState<LoanDetails | null>(null);
 
   async function getLoans() {
-    if (!isConnected) throw new Error('User disconnected');
-    if (!walletProvider) throw new Error('Wallet provider is undefined');
-
-    const ethersProvider = new BrowserProvider(walletProvider);
-
+    // no need walletProvider for this function
+    const provider = new ethers.JsonRpcProvider("https://sepolia-rpc.scroll.io/");
     const LendmeFiContract = new Contract(
       '0x201c11d25F3590De65DD72177D1f4AD364da1d3e',
       lendmefiAbi.abi,
-      ethersProvider
+      provider
     );
     const activeLoanByID = await LendmeFiContract.loans(0);
     setActiveLoanByID({
@@ -52,7 +49,7 @@ const ActiveLoans: React.FC = () => {
 
   useEffect(() => {
     getLoans();
-  }, [isConnected, walletProvider]); // Dependencies to ensure it runs when connection or provider changes
+  },); // Dependencies to ensure it runs when connection or provider changes
 
   return (
     <div className="p-4">

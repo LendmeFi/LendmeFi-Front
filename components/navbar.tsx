@@ -93,7 +93,15 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-
+        {isConnected && (
+          <NavbarItem className="hidden md:flex">
+            <NextLink href="/profile">
+              <Button className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700" variant="flat">
+                Profile
+              </Button>
+            </NextLink>
+          </NavbarItem>
+        )}
         <NavbarItem className="hidden md:flex">
           <Button
             className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700"

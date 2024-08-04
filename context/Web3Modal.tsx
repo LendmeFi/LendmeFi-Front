@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 export const projectId = "20bc8a396f156e979d8de9c456ed840b";
 
 // 2. Set chains
-const mainnet = {
+const scroll_sepolia = {
   chainId: 534351,
   name: "Scroll Sepolia Network",
   currency: "ETH",
@@ -34,14 +34,14 @@ const ethersConfig = defaultConfig({
   enableInjected: true, // true by default
   enableCoinbase: false, // true by default
   rpcUrl: "...", // used for the Coinbase SDK
-  defaultChainId: 1, // used for the Coinbase SDK
+  defaultChainId: 534351, // used for the Coinbase SDK
 });
 // eslint-disable-next-line prettier/prettier
 
 // 5. Create a Web3Modal instance
 createWeb3Modal({
   ethersConfig,
-  chains: [mainnet],
+  chains: [scroll_sepolia],
   projectId,
   enableAnalytics: false, // Optional - defaults to your Cloud configuration
   enableOnramp: false, // Optional - false as default
