@@ -26,12 +26,7 @@ import {
 } from "@web3modal/ethers/react";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  Logo,
-} from "@/components/icons";
+import { TwitterIcon, GithubIcon, DiscordIcon, Logo } from "@/components/icons";
 import { Console } from "console";
 
 export const Navbar = () => {
@@ -40,7 +35,7 @@ export const Navbar = () => {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
 
   const handleClick = async () => {
-    const provider = await Web3Modal.connect() as any;
+    const provider = (await Web3Modal.connect()) as any;
     if (provider) {
       const web3Provider = new (ethers.providers as any).Web3Provider(provider);
       const signer = web3Provider.getSigner();
@@ -48,7 +43,6 @@ export const Navbar = () => {
       const shortenedAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
     }
   };
-
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -96,7 +90,10 @@ export const Navbar = () => {
         {isConnected && (
           <NavbarItem className="hidden md:flex">
             <NextLink href="/profile">
-              <Button className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700" variant="flat">
+              <Button
+                className="text-sm font-normal text-white bg-blue-500 hover:bg-blue-700"
+                variant="flat"
+              >
                 Profile
               </Button>
             </NextLink>
@@ -110,7 +107,9 @@ export const Navbar = () => {
               open();
             }}
           >
-            {isConnected ? `${address.slice(0, 6)}...${address.slice(-3)}` : "Connect Wallet"}
+            {isConnected
+              ? `${address.slice(0, 6)}...${address.slice(-3)}`
+              : "Connect Wallet"}
           </Button>
         </NavbarItem>
       </NavbarContent>
@@ -126,8 +125,7 @@ export const Navbar = () => {
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item.label}-${index}`}>
-            </NavbarMenuItem>
+            <NavbarMenuItem key={`${item.label}-${index}`}></NavbarMenuItem>
           ))}
         </div>
       </NavbarMenu>

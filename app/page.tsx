@@ -1,28 +1,14 @@
 "use client";
-
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
 
-import Nfts from "./Nfts";
-import ActiveLoans from "./ActiveLoans";
+import Nfts from "@/components/lendMeFiComponents/nft-listing";
+import ActiveLoans from "@/app/ActiveLoans";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 
 import { useState } from "react";
-import {
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, toNumber } from "ethers";
-import { ethers } from "ethers";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"nfts" | "activeLoans">("nfts");
+  const [activeTab, setActiveTab] = useState<string>("nfts");
 
   return (
     <section className="flex flex-col items-center justify-center gap-8 py-12 md:py-16">
@@ -38,12 +24,12 @@ export default function Home() {
       <div className="w-full max-w-4xl">
         <Tabs
           aria-label="Options"
-          onChange={(key) => setActiveTab(key as "nfts" | "activeLoans")}
+          onChange={(key) => console.log(key)}
           className="w-full"
         >
           <Tab
             key="nfts"
-            title="NFT'ler"
+            title="NFTs"
             className="text-xl font-semibold"
           >
             <Card className="p-8">

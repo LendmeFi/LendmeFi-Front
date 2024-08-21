@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/react';
 import { BrowserProvider, Contract, toNumber } from 'ethers';
 import { ethers } from "ethers";
-import lendmefiAbi from '../data/LendmeFi_ABI.json';
+import Contract_Function_Abi from '@/context/ContractFunctionAbi';
 
 interface LoanDetails {
   loanId: number;
@@ -28,7 +28,7 @@ const ActiveLoans: React.FC = () => {
     const provider = new ethers.JsonRpcProvider("https://sepolia-rpc.scroll.io/");
     const LendmeFiContract = new Contract(
       '0x201c11d25F3590De65DD72177D1f4AD364da1d3e',
-      lendmefiAbi.abi,
+      Contract_Function_Abi,
       provider
     );
     const activeLoanByID = await LendmeFiContract.loans(0);
