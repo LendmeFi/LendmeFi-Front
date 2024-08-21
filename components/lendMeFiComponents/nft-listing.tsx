@@ -19,22 +19,22 @@ import { ListingDetails } from "@/types/ListingDetails";
 
 const nftData: ListingDetails[] = [
     {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919asdsadsafsfafas",
+        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
         borrowerNonce: 1,
         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
         nftTokenId: 1,
-        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977emre",
-        loanAmount: ethers.parseEther("100"),
-        interestFee: ethers.parseEther("25"),
+        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
+        loanAmount: ethers.parseEther("200"),
+        interestFee: ethers.parseEther("10"),
         loanDuration: 360000,
         borrowerSignature:
             "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
     },
     {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919asdsadas",
+        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
         borrowerNonce: 1,
         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
-        nftTokenId: 1,
+        nftTokenId: 0,
         loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
         loanAmount: ethers.parseEther("100"),
         interestFee: ethers.parseEther("25"),
@@ -53,8 +53,8 @@ const convertIpfsUriToUrl = (uri: string) => {
 };
 
 const NftTable: React.FC = () => {
-    const [nfts, setNfts] = useState<ListingDetails | null>(null); // This state is used to store the NFT details
-    const [nftPicture, setNftPicture] = useState("");
+    //const [nfts, setNfts] = useState<ListingDetails | null>(null); // This state is used to store the NFT details
+    const [nftPicture, setNftPicture] = useState<string[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectedNft, setSelectedNft] = useState<ListingDetails | null>(null);
 
@@ -67,7 +67,7 @@ const NftTable: React.FC = () => {
         const ethersProvider = new ethers.JsonRpcProvider(
             "https://sepolia-rpc.scroll.io/",
         );
-        const nftContract = new ethers.Contract(
+        let nftContract = new ethers.Contract(
             contractAddress,
             nftAbi,
             ethersProvider,
@@ -76,37 +76,25 @@ const NftTable: React.FC = () => {
         try {
             let data = await nftContract.tokenURI(tokenId);
             let url = convertIpfsUriToUrl(data);
-            setNftPicture(url);
+            return url;
         } catch (error: any) {
             console.log(error.message);
+            return "";
         }
         // let url = `https://ipfs.io/ipfs/${contractAddress}/${tokenId}.png`;
         // await setNftPicture(url);
     };
 
-    function addNft() {
-        const nft = {
-            borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
-            borrowerNonce: 1,
-            nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
-            nftTokenId: 1,
-            loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
-            loanAmount: ethers.parseEther("100"),
-            interestFee: ethers.parseEther("25"),
-            loanDuration: 360000,
-            borrowerSignature:
-                "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
-        };
-
-        setNfts(nft);
-    }
-
-    async function fetchData() {
-        await addNft();
-    }
-
     useEffect(() => {
-        getNftPicture("0x0c35e6F690EC8cF99c4509a2055066dEb043DF96", 0);
+        const fetchNftPictures = async () => {
+            const pictures = await Promise.all(
+                nftData.map(async (nft) => {
+                    return await getNftPicture(nft.nftCollateralAddress, nft.nftTokenId);
+                })
+            );
+            setNftPicture(pictures);
+        };
+        fetchNftPictures();
     }, []);
 
     return (
@@ -133,7 +121,7 @@ const NftTable: React.FC = () => {
                     <TableRow key={index}>
                         <TableCell>
                             <Image
-                                src={nftPicture}
+                                src={nftPicture[index]}
                                 alt="NFT"
                                 style={{ objectFit: "cover" }}
                                 width={100}
@@ -156,7 +144,7 @@ const NftTable: React.FC = () => {
                                 key={index}
                                 isOpen={isOpen}
                                 onOpenChange={onOpenChange}
-                                picture={nftPicture}
+                                picture={nftPicture[index]}
                                 currentNft={selectedNft as ListingDetails}
                             />
                         </TableCell>
