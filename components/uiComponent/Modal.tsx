@@ -18,6 +18,7 @@ interface Props {
 }
 
 const UIModal = ({ isOpen, onOpenChange, picture, currentNft }: Props) => {
+    console.log("currentNft", currentNft);
     return (
         <>
             <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -37,6 +38,7 @@ const UIModal = ({ isOpen, onOpenChange, picture, currentNft }: Props) => {
                                 />
                                 <p>{currentNft.borrowerAddress}</p>
                                 <p>{currentNft.nftTokenId}</p>
+                                <p>{currentNft.loanTokenAddress}</p>
                             </ModalBody>
                             <ModalFooter>
                                 <Button

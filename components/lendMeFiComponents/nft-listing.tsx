@@ -17,15 +17,13 @@ import UIModal from "../uiComponent/Modal";
 import { on } from "events";
 import { ListingDetails } from "@/types/ListingDetails";
 
-
-
 const nftData: ListingDetails[] = [
     {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
+        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919asdsadsafsfafas",
         borrowerNonce: 1,
         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
         nftTokenId: 1,
-        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
+        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977emre",
         loanAmount: ethers.parseEther("100"),
         interestFee: ethers.parseEther("25"),
         loanDuration: 360000,
@@ -33,7 +31,7 @@ const nftData: ListingDetails[] = [
             "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
     },
     {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
+        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919asdsadas",
         borrowerNonce: 1,
         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
         nftTokenId: 1,
@@ -58,8 +56,10 @@ const NftTable: React.FC = () => {
     const [nfts, setNfts] = useState<ListingDetails | null>(null); // This state is used to store the NFT details
     const [nftPicture, setNftPicture] = useState("");
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [selectedNft, setSelectedNft] = useState<ListingDetails | null>(null);
 
-    const handleOnPress = () => {
+    const handleOnPress = (nft: ListingDetails) => {
+        setSelectedNft(nft);
         onOpen();
     };
 
@@ -151,12 +151,13 @@ const NftTable: React.FC = () => {
                         </TableCell>
                         <TableCell>{nft.loanDuration / 3600} hours</TableCell>
                         <TableCell>
-                            <Button onPress={handleOnPress}>Lend</Button>
+                            <Button onPress={() => handleOnPress(nft)}>Lend</Button>
                             <UIModal
+                                key={index}
                                 isOpen={isOpen}
                                 onOpenChange={onOpenChange}
                                 picture={nftPicture}
-                                currentNft={nft}
+                                currentNft={selectedNft as ListingDetails}
                             />
                         </TableCell>
                     </TableRow>

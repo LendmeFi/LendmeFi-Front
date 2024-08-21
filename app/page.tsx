@@ -1,7 +1,7 @@
 "use client";
 import { title, subtitle } from "@/components/primitives";
 
-import Nfts from "@/components/lendMeFiComponents/nft-listing";
+import Nfts from "@/components/lendmeFiComponents/nft-listing";
 import ActiveLoans from "@/app/ActiveLoans";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 
@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-8 py-12 md:py-16">
       <div className="inline-block max-w-lg text-center">
-        <h1 className={title()}>LendMe</h1>
+        <h1 className={title()}>Lendme</h1>
         <h1 className={title({ color: "violet" })}>Fi&nbsp;</h1>
         <br />
         <h2 className={subtitle({ class: "mt-6" })}>
