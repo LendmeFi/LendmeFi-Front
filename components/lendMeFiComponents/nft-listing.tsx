@@ -18,32 +18,32 @@ import { on } from "events";
 import { ListingDetails } from "@/types/lendingDetails";
 import { getAllNftListings } from "@/app/firebaseService";
 
-const nftData: ListingDetails[] = [
-    {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
-        borrowerNonce: 1,
-        nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
-        nftTokenId: 1,
-        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
-        loanAmount: ethers.parseEther("200"),
-        interestFee: ethers.parseEther("10"),
-        loanDuration: 360000,
-        borrowerSignature:
-            "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
-    },
-    {
-        borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
-        borrowerNonce: 1,
-        nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
-        nftTokenId: 0,
-        loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
-        loanAmount: ethers.parseEther("100"),
-        interestFee: ethers.parseEther("25"),
-        loanDuration: 360000,
-        borrowerSignature:
-            "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
-    },
-];
+// const nftData: ListingDetails[] = [
+//     {
+//         borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
+//         borrowerNonce: 1,
+//         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
+//         nftTokenId: 1,
+//         loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
+//         loanAmount: ethers.parseEther("200"),
+//         interestFee: ethers.parseEther("10"),
+//         loanDuration: 360000,
+//         borrowerSignature:
+//             "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
+//     },
+//     {
+//         borrowerAddress: "0x8eBc758aBF8A3C49a5931383bB66a5B5dea4a919",
+//         borrowerNonce: 1,
+//         nftCollateralAddress: "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96",
+//         nftTokenId: 0,
+//         loanTokenAddress: "0x913efbB29E9C2E3045A082D39B36896D82268977",
+//         loanAmount: ethers.parseEther("100"),
+//         interestFee: ethers.parseEther("25"),
+//         loanDuration: 360000,
+//         borrowerSignature:
+//             "0xd7972e9afb7fcab65d9a7fa6879a9d9842918163f0039b1060c5dd53382cb4a00389dbc217071ce9b24e975a48fb497fdfe2e7bb9a3c302ca10425a6c7f700ca1b",
+//     },
+// ];
 
 
 const convertIpfsUriToUrl = (uri: string) => {
