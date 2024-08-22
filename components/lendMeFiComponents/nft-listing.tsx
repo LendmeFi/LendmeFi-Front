@@ -16,6 +16,7 @@ import nftAbi from "@/context/ContractAbi";
 import UIModal from "../uiComponent/Modal";
 import { on } from "events";
 import { ListingDetails } from "@/types/ListingDetails";
+import { getAllNftListings } from "@/app/firebaseService";
 
 const nftData: ListingDetails[] = [
     {
@@ -44,6 +45,7 @@ const nftData: ListingDetails[] = [
     },
 ];
 
+
 const convertIpfsUriToUrl = (uri: string) => {
     if (uri.startsWith("ipfs://")) {
         console.log(`Converting IPFS URI to URL: ${uri}`);
@@ -57,6 +59,7 @@ const NftTable: React.FC = () => {
     const [nftPicture, setNftPicture] = useState<string[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectedNft, setSelectedNft] = useState<ListingDetails | null>(null);
+    const [NftData, setNftData] = useState<ListingDetails[]>([]);
 
     const handleOnPress = (nft: ListingDetails) => {
         setSelectedNft(nft);
@@ -75,26 +78,38 @@ const NftTable: React.FC = () => {
 
         try {
             let data = await nftContract.tokenURI(tokenId);
+            console.log("uridata: ", data);
             let url = convertIpfsUriToUrl(data);
             return url;
         } catch (error: any) {
             console.log(error.message);
-            return "";
+            return "hataaaaaaaaa";
         }
         // let url = `https://ipfs.io/ipfs/${contractAddress}/${tokenId}.png`;
         // await setNftPicture(url);
     };
 
     useEffect(() => {
-        const fetchNftPictures = async () => {
-            const pictures = await Promise.all(
-                nftData.map(async (nft) => {
-                    return await getNftPicture(nft.nftCollateralAddress, nft.nftTokenId);
-                })
-            );
-            setNftPicture(pictures);
+        const fetchDataAndPictures = async () => {
+            try {
+                // first fetch NFT data
+                const data = await getAllNftListings();
+                setNftData(data);
+
+                // then fetch NFT pictures
+                const pictures = await Promise.all(
+                    data.map(async (nft) => {
+                        console.log("nftttttttttttt: ", nft.nftCollateralAddress, nft.nftTokenId);
+                        return await getNftPicture(nft.nftCollateralAddress, nft.nftTokenId);
+                    })
+                );
+                setNftPicture(pictures);
+                console.log("nftPicture: ", pictures);
+            } catch (error: any) {
+                console.error("Error fetching data or pictures: ", error.message);
+            }
         };
-        fetchNftPictures();
+        fetchDataAndPictures();
     }, []);
 
     return (
@@ -117,7 +132,7 @@ const NftTable: React.FC = () => {
                 )}
             </TableHeader>
             <TableBody>
-                {nftData.map((nft, index) => (
+                {NftData.map((nft, index) => (
                     <TableRow key={index}>
                         <TableCell>
                             <Image

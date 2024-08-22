@@ -1,4 +1,5 @@
 
+import { ListingDetails } from '@/types/ListingDetails';
 import { db } from './FirebaseConfig';
 import { getFirestore, Firestore, collection, addDoc, getDocs, getDoc, DocumentData, QuerySnapshot, doc, setDoc, increment } from 'firebase/firestore';
 
@@ -30,8 +31,8 @@ async function getNftListingsByAddress(walletAddress: string): Promise<DocumentD
 }
 
 // Tüm adreslerdeki NFT verilerini almak için fonksiyon
-async function getAllNftListings(): Promise<DocumentData[]> {
-    const nftListings: DocumentData[] = [];
+async function getAllNftListings(): Promise<ListingDetails[]> {
+    const nftListings: ListingDetails[] = [];
     try {
         const nftListingCollectionRef = collection(db, 'nft-listing');
         const walletAddressesSnapshot: QuerySnapshot = await getDocs(nftListingCollectionRef);
@@ -42,7 +43,7 @@ async function getAllNftListings(): Promise<DocumentData[]> {
             const nftDocsSnapshot: QuerySnapshot = await getDocs(nftCollectionRef);
 
             nftDocsSnapshot.forEach((nftDoc) => {
-                nftListings.push(nftDoc.data());
+                nftListings.push(nftDoc.data() as ListingDetails);
             });
         }
     } catch (e) {
