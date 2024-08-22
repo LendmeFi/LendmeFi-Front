@@ -15,7 +15,7 @@ import {
 import nftAbi from "@/context/ContractAbi";
 import UIModal from "../uiComponent/Modal";
 import { on } from "events";
-import { ListingDetails } from "@/types/ListingDetails";
+import { ListingDetails } from "@/types/lendingDetails";
 import { getAllNftListings } from "@/app/firebaseService";
 
 const nftData: ListingDetails[] = [

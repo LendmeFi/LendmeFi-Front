@@ -1,10 +1,10 @@
 
-import { ListingDetails } from '@/types/ListingDetails';
+import { ListingDetails, OfferDetails } from '@/types/lendingDetails';
 import { db } from './FirebaseConfig';
 import { getFirestore, Firestore, collection, addDoc, getDocs, getDoc, DocumentData, QuerySnapshot, doc, setDoc, increment } from 'firebase/firestore';
 
 // NFT verisini eklemek için fonksiyon
-async function addNftListing(walletAddress: string, nftData: any) {
+async function addNftListing(walletAddress: string, nftData: ListingDetails): Promise<boolean> {
     try {
         const nftCollectionRef = collection(db, 'nft-listing', walletAddress, 'id');
         // Mevcut belgelerin sayısını kontrol et
@@ -12,20 +12,24 @@ async function addNftListing(walletAddress: string, nftData: any) {
         const newIndex = snapshot.size; // Mevcut belge sayısı yeni indeks olacak
         const docRef = await doc(nftCollectionRef, newIndex.toString());
         await setDoc(docRef, nftData);
-        incrementBorrowerNonce(walletAddress);
-        console.log('Document written with ID: ', docRef.id);
+        if (await incrementBorrowerNonce(walletAddress)) {
+            console.log('Document written with ID: ', docRef.id);
+            return true;
+        }
+        return false;
     } catch (e) {
         console.error('Error adding document: ', e);
+        return false;
     }
 }
 
 // NFT verisini okumak için fonksiyon
-async function getNftListingsByAddress(walletAddress: string): Promise<DocumentData[]> {
+async function getNftListingsByAddress(walletAddress: string): Promise<ListingDetails[]> {
     const nftCollectionRef = collection(db, 'nft-listing', walletAddress, 'id');
     const querySnapshot: QuerySnapshot = await getDocs(nftCollectionRef);
-    const nftListings: DocumentData[] = [];
+    const nftListings: ListingDetails[] = [];
     querySnapshot.forEach((doc) => {
-        nftListings.push(doc.data());
+        nftListings.push(doc.data() as ListingDetails);
     });
     return nftListings;
 }
@@ -53,12 +57,12 @@ async function getAllNftListings(): Promise<ListingDetails[]> {
 }
 
 // Belirli bir NFT verisini almak için fonksiyon
-async function getNftListingById(walletAddress: string, docs_id: string): Promise<DocumentData | null> {
+async function getNftListingById(walletAddress: string, docs_id: string): Promise<ListingDetails | null> {
     try {
         const nftCollectionRef = doc(db, 'nft-listing', walletAddress, 'id', docs_id);
         const nftDoc = await getDoc(nftCollectionRef);
         if (nftDoc.exists()) {
-            return nftDoc.data();
+            return nftDoc.data() as ListingDetails;
         } else {
             console.log('No such document!');
             return null;
@@ -70,7 +74,7 @@ async function getNftListingById(walletAddress: string, docs_id: string): Promis
 }
 
 // Belirli bir cüzdan adresine NFT teklifi eklemek için fonksiyon
-async function addNftOffer(walletAddress: string, offerData: DocumentData): Promise<void> {
+async function addNftOffer(walletAddress: string, offerData: OfferDetails): Promise<boolean> {
     try {
         const nftCollectionRef = collection(db, 'nft-offers', walletAddress, 'id');
 
@@ -84,25 +88,28 @@ async function addNftOffer(walletAddress: string, offerData: DocumentData): Prom
         // Veriyi belgeye yaz
         await setDoc(docRef, offerData);
 
-        incrementLenderNonce(walletAddress);
-
-        // Başarılı olursa, eklenen belgenin ID'sini konsola yazdır
-        console.log('NFT offer added with ID:', docRef.id);
+        if (await incrementLenderNonce(walletAddress)) {
+            return true;
+            // Başarılı olursa, eklenen belgenin ID'sini konsola yazdır
+            console.log('NFT offer added with ID:', docRef.id);
+        }
+        return false;
     } catch (e) {
         // Hata durumunda, hata mesajını konsola yazdır
         console.error('Error adding document: ', e);
+        return false;
     }
 }
 
 // Belirli bir cüzdan adresindeki tüm NFT tekliflerini almak için fonksiyon
-async function getNftOffersByAddress(walletAddress: string): Promise<DocumentData[]> {
-    const nftOffers: DocumentData[] = [];
+async function getNftOffersByAddress(walletAddress: string): Promise<OfferDetails[]> {
+    const nftOffers: OfferDetails[] = [];
     try {
         const nftOffersCollectionRef = collection(db, 'nft-offers', walletAddress, 'id');
         const nftOffersSnapshot: QuerySnapshot = await getDocs(nftOffersCollectionRef);
 
         nftOffersSnapshot.forEach((offerDoc) => {
-            nftOffers.push(offerDoc.data());
+            nftOffers.push(offerDoc.data() as OfferDetails);
         });
     } catch (e) {
         console.error('Error getting documents: ', e);
@@ -111,12 +118,12 @@ async function getNftOffersByAddress(walletAddress: string): Promise<DocumentDat
 }
 
 // Belirli bir NFT teklifini almak için fonksiyon
-async function getNftOfferById(walletAddress: string, offerId: string): Promise<DocumentData | null> {
+async function getNftOfferById(walletAddress: string, offerId: string): Promise<OfferDetails | null> {
     try {
         const offerDocRef = doc(db, 'nft-offers', walletAddress, 'id', offerId);
         const offerDoc = await getDoc(offerDocRef);
         if (offerDoc.exists()) {
-            return offerDoc.data();
+            return offerDoc.data() as OfferDetails;
         } else {
             console.log('No such document!');
             return null;
