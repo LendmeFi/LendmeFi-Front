@@ -1,25 +1,22 @@
+
+"use client";
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import { useWeb3ModalAccount } from '@web3modal/ethers/react'
 
 
-// Provider, state yönetimi olmadıgı için hata alıyorum.
-
 const Profile: React.FC = () => {
     const { address, isConnected } = useWeb3ModalAccount();
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
         try {
             if (!isConnected) {
-                //router.push('/');
                 setLoading(true);
             }
         } catch (error) {
             console.error('Error checking wallet connection:', error);
-            // router.push('/');
+
         }
     }, [address, isConnected]);
 
@@ -36,6 +33,7 @@ const Profile: React.FC = () => {
             <h1>Profile Page</h1>
             <p>This is the profile page.</p>
         </div>
+
     );
 };
 
