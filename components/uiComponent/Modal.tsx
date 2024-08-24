@@ -21,7 +21,8 @@ interface Props {
 
 const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
     const [nftName, setNftName] = useState<string>("");
-    async function fetchNftName(currentNft: ListingDetails) {
+    async function fetchNftName(currentNft?: ListingDetails) {
+        if (!currentNft) return;
         const ethersProvider = new ethers.JsonRpcProvider(
             "https://sepolia-rpc.scroll.io/",
         );
@@ -47,7 +48,7 @@ const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
                                 {currentNft.nftTokenId}
                             </ModalHeader>
                             <ModalBody>
-                                
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <Image
