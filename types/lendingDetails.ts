@@ -32,7 +32,7 @@ export interface loansDetails {
     loanAmount: bigint;
     interestFee: bigint;
     lendmeFiFee: bigint;
-    loanStartTime: number;
+    loanStartTime: bigint;
     loanDuration: number;
 }
 
