@@ -5,6 +5,8 @@ import { Card, CardBody, Tab, Tabs, Progress } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import MyNFTs from "@/components/lendmeFiComponents/myNfts";
 import MyLoans from "@/components/lendmeFiComponents/myLoans";
+import MyList from "@/components/lendmeFiComponents/myList";
+import MyOffers from "@/components/lendmeFiComponents/myOffers";
 
 const Profile: React.FC = () => {
     const { address, isConnected } = useWeb3ModalAccount();
@@ -51,12 +53,16 @@ const Profile: React.FC = () => {
                     </Tab>
                     <Tab key="myList" title="My List" className="text-lg font-semibold">
                         <Card className="p-4 rounded-lg text-white">
-                            <CardBody>{/* My List Component */}</CardBody>
+                            <CardBody>
+                                <MyList />
+                            </CardBody>
                         </Card>
                     </Tab>
                     <Tab key="myOffers" title="My Offers" className="text-lg font-semibold">
                         <Card className="p-4 rounded-lg text-white">
-                            <CardBody>{/* My Offers Component */}</CardBody>
+                            <CardBody>
+                                <MyOffers />
+                            </CardBody>
                         </Card>
                     </Tab>
                 </Tabs>

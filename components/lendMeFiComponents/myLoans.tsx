@@ -150,9 +150,7 @@ const myLoans: React.FC = () => {
     if (!hasLoan) {
         return (
             <div style={{ textAlign: "center", marginTop: "20px" }}>
-                <title >
-                    You don't have any Loans.
-                </title>
+                You don't have any Loans.
             </div>
         );
     }

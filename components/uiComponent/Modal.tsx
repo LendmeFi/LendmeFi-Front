@@ -8,7 +8,7 @@ import {
     Button,
     Image,
 } from "@nextui-org/react";
-import { ListingDetails } from "@/types/ListingDetails";
+import { ListingDetails } from "@/types/lendingDetails";
 
 interface Props {
     isOpen: boolean;
