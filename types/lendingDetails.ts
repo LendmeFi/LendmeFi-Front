@@ -35,3 +35,11 @@ export interface loansDetails {
     loanStartTime: number;
     loanDuration: number;
 }
+
+export interface nftData{
+    nftCollateralAddress: string;
+    nftTokenId: number;
+    nftPicture: string;
+    nftName: string;
+    nftSymbol: string;
+}
