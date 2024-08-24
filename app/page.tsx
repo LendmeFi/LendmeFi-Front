@@ -8,7 +8,7 @@ import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { useState } from "react";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<string>("nfts");
+  //const [activeTab, setActiveTab] = useState<string>("nfts");
 
   return (
     <section className="flex flex-col items-center justify-center gap-8 py-12 md:py-16">
