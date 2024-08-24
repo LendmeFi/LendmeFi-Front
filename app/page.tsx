@@ -1,7 +1,7 @@
 "use client";
 import { title, subtitle } from "@/components/primitives";
 
-import Nfts from "@/components/lendmeFiComponents/nft-listing";
+import Nfts from "@/components/lendMeFiComponents/nft-listing";
 import ActiveLoans from "@/app/ActiveLoans";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 

@@ -7,6 +7,12 @@ import {
     ModalFooter,
     Button,
     Image,
+    Table,
+    TableColumn,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableCell,
 } from "@nextui-org/react";
 import { ListingDetails } from "@/types/lendingDetails";
 import { ethers } from "ethers";
@@ -21,7 +27,9 @@ interface Props {
 
 const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
     const [nftName, setNftName] = useState<string>("");
-    async function fetchNftName(currentNft: ListingDetails) {
+    async function fetchNftName(currentNft?: ListingDetails) {
+        if (!currentNft) return;
+        console.log("currentNft", currentNft);
         const ethersProvider = new ethers.JsonRpcProvider(
             "https://sepolia-rpc.scroll.io/",
         );
@@ -44,26 +52,48 @@ const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                {currentNft.nftTokenId}
+                                {nftName}
                             </ModalHeader>
                             <ModalBody>
-                                
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <Image
                                             src={picture[currentNft.nftTokenId]}
                                             alt="NFT"
                                             style={{ objectFit: "cover" }}
-                                            width={100}
-                                            height={100}
+                                            width={150}
+                                            height={150}
                                         />
                                     </div>
                                     <div>
                                         <p>Name: {nftName}</p>
                                         <p>ID: {currentNft.nftTokenId}</p>
-
+                                        <p>Amount: {currentNft.loanAmount}</p>
+                                        <p>Fee: {currentNft.interestFee}</p>
+                                        <p>
+                                            Duration: {currentNft.loanDuration}
+                                        </p>
                                     </div>
                                 </div>
+                                <p className="text-center">Offers</p>
+                                <Table aria-label="Example static collection table">
+                                    <TableHeader>
+                                        <TableColumn>OFFER NAME</TableColumn>
+                                        <TableColumn>OFFER PRICE</TableColumn>
+                                        <TableColumn>STATUS</TableColumn>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow key="1">
+                                            <TableCell>LendmeFi-1</TableCell>
+                                            <TableCell>1 ETH</TableCell>
+                                            <TableCell>
+                                                <Button color="success" size="sm">
+                                                    ACCEPT IT
+                                                </Button>{" "}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
                             </ModalBody>
                             <ModalFooter>
                                 <Button
