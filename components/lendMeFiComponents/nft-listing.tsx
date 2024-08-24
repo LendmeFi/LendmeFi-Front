@@ -45,7 +45,6 @@ import { getAllNftListings } from "@/app/firebaseService";
 //     },
 // ];
 
-
 const convertIpfsUriToUrl = (uri: string) => {
     if (uri.startsWith("ipfs://")) {
         console.log(`Converting IPFS URI to URL: ${uri}`);
@@ -99,74 +98,89 @@ const NftTable: React.FC = () => {
                 // then fetch NFT pictures
                 const pictures = await Promise.all(
                     data.map(async (nft) => {
-                        console.log("nftttttttttttt: ", nft.nftCollateralAddress, nft.nftTokenId);
-                        return await getNftPicture(nft.nftCollateralAddress, nft.nftTokenId);
-                    })
+                        console.log(
+                            "nftttttttttttt: ",
+                            nft.nftCollateralAddress,
+                            nft.nftTokenId,
+                        );
+                        return await getNftPicture(
+                            nft.nftCollateralAddress,
+                            nft.nftTokenId,
+                        );
+                    }),
                 );
                 setNftPicture(pictures);
                 console.log("nftPicture: ", pictures);
             } catch (error: any) {
-                console.error("Error fetching data or pictures: ", error.message);
+                console.error(
+                    "Error fetching data or pictures: ",
+                    error.message,
+                );
             }
         };
         fetchDataAndPictures();
     }, []);
 
     return (
-        <Table aria-label="NFT Details">
-            <TableHeader
-                columns={[
-                    { uid: "nftPicture", name: "NFT Picture" },
-                    { uid: "borrowerAddress", name: "Borrower Address" },
-                    { uid: "nftTokenId", name: "NFT Token ID" },
-                    { uid: "loanAmount", name: "Amount" },
-                    { uid: "interestFee", name: "Interest Fee" },
-                    { uid: "loanDuration", name: "Duration" },
-                    { uid: "lendedButton", name: "Lending" },
-                ]}
-            >
-                {(column) => (
-                    <TableColumn key={column.uid} align="start">
-                        {column.name}
-                    </TableColumn>
-                )}
-            </TableHeader>
-            <TableBody>
-                {NftData.map((nft, index) => (
-                    <TableRow key={index}>
-                        <TableCell>
-                            <Image
-                                src={nftPicture[index]}
-                                alt="NFT"
-                                style={{ objectFit: "cover" }}
-                                width={100}
-                                height={100}
-                            />
-                        </TableCell>
-                        <TableCell>{`${nft.borrowerAddress.slice(0, 6)}...${nft.borrowerAddress.slice(-4)}`}</TableCell>
-                        {/* shorten address */}
-                        <TableCell>{nft.nftTokenId}</TableCell>
-                        <TableCell>
-                            {ethers.formatEther(nft.loanAmount)} ETH
-                        </TableCell>
-                        <TableCell>
-                            {ethers.formatEther(nft.interestFee)} ETH
-                        </TableCell>
-                        <TableCell>{nft.loanDuration / 3600} hours</TableCell>
-                        <TableCell>
-                            <Button onPress={() => handleOnPress(nft)}>Lend</Button>
-                            <UIModal
-                                key={index}
-                                isOpen={isOpen}
-                                onOpenChange={onOpenChange}
-                                picture={nftPicture[index]}
-                                currentNft={selectedNft as ListingDetails}
-                            />
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+        <>
+            <Table aria-label="NFT Details">
+                <TableHeader
+                    columns={[
+                        { uid: "nftPicture", name: "NFT Picture" },
+                        { uid: "borrowerAddress", name: "Borrower Address" },
+                        { uid: "nftTokenId", name: "NFT Token ID" },
+                        { uid: "loanAmount", name: "Amount" },
+                        { uid: "interestFee", name: "Interest Fee" },
+                        { uid: "loanDuration", name: "Duration" },
+                        { uid: "lendedButton", name: "Lending" },
+                    ]}
+                >
+                    {(column) => (
+                        <TableColumn key={column.uid} align="start">
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody>
+                    {NftData.map((nft, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                <Image
+                                    src={nftPicture[index]}
+                                    alt="NFT"
+                                    style={{ objectFit: "cover" }}
+                                    width={100}
+                                    height={100}
+                                />
+                            </TableCell>
+                            <TableCell>{`${nft.borrowerAddress.slice(0, 6)}...${nft.borrowerAddress.slice(-4)}`}</TableCell>
+                            {/* shorten address */}
+                            <TableCell>{nft.nftTokenId}</TableCell>
+                            <TableCell>
+                                {ethers.formatEther(nft.loanAmount)} ETH
+                            </TableCell>
+                            <TableCell>
+                                {ethers.formatEther(nft.interestFee)} ETH
+                            </TableCell>
+                            <TableCell>
+                                {nft.loanDuration / 3600} hours
+                            </TableCell>
+                            <TableCell>
+                                <Button onPress={() => handleOnPress(nft)}>
+                                    Lend
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            <UIModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                currentNft={selectedNft as ListingDetails}
+                picture={nftPicture}
+            />
+        </>
     );
 };
 

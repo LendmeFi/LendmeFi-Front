@@ -44,7 +44,6 @@ export default function RootLayout({
                 href="" // website link
                 title="Homepage"
               >
-                <p className="text-primary">Balon Traders</p>
               </Link>
             </footer>
           </div>

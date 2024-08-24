@@ -34,16 +34,6 @@ export const Navbar = () => {
   const { walletInfo } = useWalletInfo();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
 
-  const handleClick = async () => {
-    const provider = (await Web3Modal.connect()) as any;
-    if (provider) {
-      const web3Provider = new (ethers.providers as any).Web3Provider(provider);
-      const signer = web3Provider.getSigner();
-      const address = await signer.getAddress();
-      const shortenedAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
-    }
-  };
-
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -53,22 +43,6 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">LendmeFi</p>
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul>
       </NavbarContent>
 
       <NavbarContent
@@ -79,9 +53,9 @@ export const Navbar = () => {
           <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
             <TwitterIcon className="text-default-500" />
           </Link>
-          <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
+          {/* <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
-          </Link>
+          </Link>  */}
           <Link isExternal aria-label="Github" href={siteConfig.links.github}>
             <GithubIcon className="text-default-500" />
           </Link>
@@ -108,7 +82,7 @@ export const Navbar = () => {
             }}
           >
             {isConnected
-              ? `${address.slice(0, 6)}...${address.slice(-3)}`
+              ? `${address?.slice(0, 6)}...${address?.slice(-3)}`
               : "Connect Wallet"}
           </Button>
         </NavbarItem>
@@ -121,14 +95,6 @@ export const Navbar = () => {
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
-
-      <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item.label}-${index}`}></NavbarMenuItem>
-          ))}
-        </div>
-      </NavbarMenu>
     </NextUINavbar>
   );
 };
