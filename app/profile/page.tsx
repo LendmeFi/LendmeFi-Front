@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { Card, CardBody, Tab, Tabs, Progress } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import MyNFTs from "@/components/lendmeFiComponents/myNfts";
-import MyLoans from "@/components/lendmeFiComponents/myLoans";
-import MyList from "@/components/lendmeFiComponents/myList";
-import MyOffers from "@/components/lendmeFiComponents/myOffers";
+import MyNFTs from "@/components/lendMeFiComponents/myNfts";
+import MyLoans from "@/components/lendMeFiComponents/myLoans";
+import MyList from "@/components/lendMeFiComponents/myList";
+import MyOffers from "@/components/lendMeFiComponents/myOffers";
 
 const Profile: React.FC = () => {
     const { address, isConnected } = useWeb3ModalAccount();
