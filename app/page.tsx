@@ -5,14 +5,10 @@ import Nfts from "@/components/lendmeFiComponents/nft-listing";
 import ActiveLoans from "@/app/ActiveLoans";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 
-import { useState } from "react";
-
 export default function Home() {
-  //const [activeTab, setActiveTab] = useState<string>("nfts");
-
   return (
     <section className="flex flex-col items-center justify-center gap-8 py-12 md:py-16">
-      <div className="inline-block max-w-lg text-center">
+      <div className="inline-block max-w-lg xl:max-w-3xl text-center">
         <h1 className={title()}>Lendme</h1>
         <h1 className={title({ color: "violet" })}>Fi&nbsp;</h1>
         <br />
@@ -21,10 +17,9 @@ export default function Home() {
         </h2>
       </div>
 
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl xl:max-w-full">
         <Tabs
           aria-label="Options"
-          onChange={(key) => console.log(key)}
           className="w-full"
         >
           <Tab
