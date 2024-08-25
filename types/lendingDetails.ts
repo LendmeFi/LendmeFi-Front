@@ -4,8 +4,8 @@ export interface ListingDetails {
     nftCollateralAddress: string;
     nftTokenId: number;
     loanTokenAddress: string;
-    loanAmount: bigint;
-    interestFee: bigint;
+    loanAmount: string;
+    interestFee: string;
     loanDuration: number;
     borrowerSignature: string;
 }

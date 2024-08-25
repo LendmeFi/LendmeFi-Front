@@ -54,7 +54,7 @@ const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
                                 {nftName}
                             </ModalHeader>
                             <ModalBody>
-                                
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <Image
@@ -78,19 +78,26 @@ const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
                                 <p className="text-center">Offers</p>
                                 <Table aria-label="Example static collection table">
                                     <TableHeader>
-                                        <TableColumn>OFFER NAME</TableColumn>
-                                        <TableColumn>OFFER PRICE</TableColumn>
-                                        <TableColumn>STATUS</TableColumn>
+                                        <TableColumn>OFFERER ADDRESS</TableColumn>
+                                        <TableColumn>OFFER AMOUNT</TableColumn>
+                                        <TableColumn>OFFER INTEREST FEE</TableColumn>
+                                        <TableColumn>OFFER DURATION TIME</TableColumn>
                                     </TableHeader>
                                     <TableBody>
                                         <TableRow key="1">
                                             <TableCell>LendmeFi-1</TableCell>
                                             <TableCell>1 ETH</TableCell>
-                                            <TableCell>
+                                            <TableCell>0.5 ETH</TableCell>
+                                            <TableCell>1 month</TableCell>
+                                            {/* <TableCell>
                                                 <Button color="success" size="sm">
                                                     ACCEPT IT
                                                 </Button>{" "}
-                                            </TableCell>
+                                            {/* <TableCell>
+                                                <Button color="success" size="sm">
+                                                    ACCEPT IT
+                                                </Button>{" "}
+                                            </TableCell> */}
                                         </TableRow>
                                     </TableBody>
                                 </Table>
