@@ -2,7 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import { Contract, Eip1193Provider, ethers } from "ethers";
-import { Button, CircularProgress, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import {
+    Button,
+    CircularProgress,
+    Image,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    useDisclosure,
+} from "@nextui-org/react";
 import {
     Table,
     TableHeader,
@@ -16,23 +27,22 @@ import nftAbi from "@/context/ContractAbi";
 import UIModal from "../uiComponent/Modal";
 import { on } from "events";
 import { ListingDetails, nftData } from "@/types/lendingDetails";
-import { BrowserProvider } from 'ethers'
-import { useWeb3ModalProvider } from '@web3modal/ethers/react'
+import { BrowserProvider } from "ethers";
+import { useWeb3ModalProvider } from "@web3modal/ethers/react";
 import { addNftListing, getBorrowerNonce } from "@/app/firebaseService";
-
 
 const myNfts: React.FC = () => {
     const [nftPicture, setNftPicture] = useState<string[]>([]);
     const [NftData, setNftData] = useState<nftData[]>([]);
-    const { walletProvider } = useWeb3ModalProvider()
+    const { walletProvider } = useWeb3ModalProvider();
     const wProvider = new BrowserProvider(walletProvider as Eip1193Provider);
-    const [loading, setLoading] = useState(true);  // Loading state
+    const [loading, setLoading] = useState(true); // Loading state
     const [hasNfts, setHasNfts] = useState(false);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectedNft, setSelectedNft] = useState<nftData | null>(null);
 
     const nftCollateralAddress1 = "0x0c35e6F690EC8cF99c4509a2055066dEb043DF96";
-    const loanTokenAddress1 = "0x913efbB29E9C2E3045A082D39B36896D82268977"
+    const loanTokenAddress1 = "0x913efbB29E9C2E3045A082D39B36896D82268977";
     const ethersProvider = new ethers.JsonRpcProvider(
         "https://sepolia-rpc.scroll.io/",
     );
@@ -64,14 +74,18 @@ const myNfts: React.FC = () => {
         // Gerçek dünyada, kontrattaki tokenId aralığını bilmek faydalı olur.
         for (let i = 0; i <= 100; i++) {
             try {
-                const owner = await nftContract.ownerOf(i) as string;
+                const owner = (await nftContract.ownerOf(i)) as string;
                 console.log(`Owner of tokenId ${i}: ${owner}`);
                 if (owner === userAddress.toString() && balance > 0) {
                     ownedTokenIds.push(i);
                     balance--;
                 }
             } catch (err) {
-                if ((err as Error).message.includes("ERC721: owner query for nonexistent token")) {
+                if (
+                    (err as Error).message.includes(
+                        "ERC721: owner query for nonexistent token",
+                    )
+                ) {
                     console.log(`Token ID ${i} does not exist.`);
                     continue;
                 }
@@ -114,8 +128,11 @@ const myNfts: React.FC = () => {
                     setHasNfts(true);
                     const pictures = await Promise.all(
                         nftIds.map(async (number) => {
-                            return await getNftPicture(nftCollateralAddress1, number);
-                        })
+                            return await getNftPicture(
+                                nftCollateralAddress1,
+                                number,
+                            );
+                        }),
                     );
                     setNftPicture(pictures);
                     const name = await nftContract.name();
@@ -132,14 +149,16 @@ const myNfts: React.FC = () => {
                     setNftData(data);
                 }
             } catch (error: any) {
-                console.error("Error fetching data or pictures: ", error.message);
+                console.error(
+                    "Error fetching data or pictures: ",
+                    error.message,
+                );
             } finally {
                 setLoading(false);
             }
         };
         fetchDataAndPictures();
     }, []);
-
 
     interface Props {
         isOpen: boolean;
@@ -150,15 +169,15 @@ const myNfts: React.FC = () => {
 
     const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
         const [nftName, setNftName] = useState<string>("");
-        const [loanAmount, setLoanAmount] = useState('');
-        const [interestFee, setInterestFee] = useState('');
-        const [loanDuration, setLoanDuration] = useState('');
+        const [loanAmount, setLoanAmount] = useState("");
+        const [interestFee, setInterestFee] = useState("");
+        const [loanDuration, setLoanDuration] = useState("");
 
         const domain = {
             name: "LendmeFi",
             version: "1",
-            chainId: 534351,  // Scroll Sepolia chain id
-            verifyingContract: "0x201c11d25F3590De65DD72177D1f4AD364da1d3e" // be careful with verifyingContract is must be the main contract address.
+            chainId: 534351, // Scroll Sepolia chain id
+            verifyingContract: "0x201c11d25F3590De65DD72177D1f4AD364da1d3e", // be careful with verifyingContract is must be the main contract address.
         };
 
         const types = {
@@ -170,8 +189,8 @@ const myNfts: React.FC = () => {
                 { name: "loanTokenAddress", type: "address" },
                 { name: "loanAmount", type: "uint256" },
                 { name: "interestFee", type: "uint256" },
-                { name: "loanDuration", type: "uint256" }
-            ]
+                { name: "loanDuration", type: "uint256" },
+            ],
         };
 
         const handleSubmit = async (event: React.FormEvent) => {
@@ -192,10 +211,14 @@ const myNfts: React.FC = () => {
                 loanTokenAddress: loanTokenAddress1,
                 loanAmount: loanAmount,
                 interestFee: interestFee,
-                loanDuration: loanDuration
+                loanDuration: loanDuration,
             };
 
-            const signature = await signer.signTypedData(domain, types, borrowerData);
+            const signature = await signer.signTypedData(
+                domain,
+                types,
+                borrowerData,
+            );
 
             const listData: ListingDetails = {
                 borrowerAddress: userAddress,
@@ -215,9 +238,7 @@ const myNfts: React.FC = () => {
             } else {
                 console.log("Error listing");
             }
-
         };
-
 
         async function fetchNftName(currentNft?: nftData) {
             if (!currentNft) return;
@@ -238,7 +259,11 @@ const myNfts: React.FC = () => {
         }, [currentNft]);
         return (
             <>
-                <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
+                <Modal
+                    backdrop="blur"
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                >
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -246,11 +271,14 @@ const myNfts: React.FC = () => {
                                     {nftName}
                                 </ModalHeader>
                                 <ModalBody>
-
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
                                             <Image
-                                                src={picture[currentNft.nftTokenId]}
+                                                src={
+                                                    picture[
+                                                    currentNft.nftTokenId
+                                                    ]
+                                                }
                                                 alt="NFT"
                                                 style={{ objectFit: "cover" }}
                                                 width={150}
@@ -260,36 +288,55 @@ const myNfts: React.FC = () => {
                                         <div>
                                             <form onSubmit={handleSubmit}>
                                                 <div>
-                                                    <label>
-                                                        Amount:
-                                                        <input
+                                                    {/* <input
                                                             type="text"
                                                             value={loanAmount}
                                                             onChange={(e) => setLoanAmount(e.target.value)}
-                                                        />
-                                                    </label>
+                                                        /> */}
+                                                    <Input
+                                                        key="1"
+                                                        type="text"
+                                                        variant="bordered"
+                                                        value={loanAmount}
+                                                        label="Amount"
+                                                        className="max-w-[220px]"
+                                                        onChange={(e) =>
+                                                            setLoanAmount(
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    />
                                                 </div>
                                                 <div>
-                                                    <label>
-                                                        Fee:
-                                                        <input
-                                                            type="text"
-                                                            value={interestFee}
-                                                            onChange={(e) => setInterestFee(e.target.value)}
-                                                        />
-                                                    </label>
+                                                    <Input
+                                                        key="2"
+                                                        type="text"
+                                                        variant="bordered"
+                                                        value={interestFee}
+                                                        label="Fee"
+                                                        className="max-w-[220px]"
+                                                        onChange={(e) =>
+                                                            setInterestFee(
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    />
                                                 </div>
                                                 <div>
-                                                    <label>
-                                                        Duration:
-                                                        <input
-                                                            type="text"
-                                                            value={loanDuration}
-                                                            onChange={(e) => setLoanDuration(e.target.value)}
-                                                        />
-                                                    </label>
+                                                    <Input
+                                                        key="3"
+                                                        type="text"
+                                                        variant="bordered"
+                                                        value={loanDuration}
+                                                        label="Duration"
+                                                        className="max-w-[220px]"
+                                                        onChange={(e) =>
+                                                            setLoanDuration(
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    />
                                                 </div>
-                                                <Button onClick={handleSubmit} type="submit" color="primary">Libbast it</Button>
                                             </form>
                                         </div>
                                     </div>
@@ -302,7 +349,12 @@ const myNfts: React.FC = () => {
                                     >
                                         Close
                                     </Button>
-                                    <Button onClick={handleSubmit} color="primary">Lisaaaaazzzbbbbaacccct it</Button>
+                                    <Button
+                                        onClick={handleSubmit}
+                                        color="primary"
+                                    >
+                                        Submit
+                                    </Button>
                                 </ModalFooter>
                             </>
                         )}
@@ -319,7 +371,14 @@ const myNfts: React.FC = () => {
 
     if (loading) {
         return (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "25vh" }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "25vh",
+                }}
+            >
                 <CircularProgress />
             </div>
         );
@@ -328,9 +387,7 @@ const myNfts: React.FC = () => {
     if (!hasNfts) {
         return (
             <div style={{ textAlign: "center", marginTop: "20px" }}>
-
                 You don't have any NFTs for listing.
-
             </div>
         );
     }
@@ -343,7 +400,10 @@ const myNfts: React.FC = () => {
                         { uid: "nftPicture", name: "NFT Picture" },
                         { uid: "nftName", name: "NFT Name" },
                         { uid: "nftSymbol", name: "NFT Symbol" },
-                        { uid: "nftCollateralAddress", name: "NFT Contract Address" },
+                        {
+                            uid: "nftCollateralAddress",
+                            name: "NFT Contract Address",
+                        },
                         { uid: "nftTokenId", name: "NFT Token ID" },
                         { uid: "actions", name: "Actions" },
                     ]}
@@ -371,7 +431,9 @@ const myNfts: React.FC = () => {
                             <TableCell>{`${nft.nftCollateralAddress.slice(0, 6)}...${nft.nftCollateralAddress.slice(-4)}`}</TableCell>
                             <TableCell>{nft.nftTokenId}</TableCell>
                             <TableCell>
-                                <Button onPress={() => handleOnPress(nft)}>List it</Button>
+                                <Button onPress={() => handleOnPress(nft)}>
+                                    List it
+                                </Button>
                                 {/* <UIModal
                                 key={index}
                                 isOpen={isOpen}
