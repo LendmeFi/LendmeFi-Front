@@ -302,7 +302,7 @@ const myNfts: React.FC = () => {
                                     >
                                         Close
                                     </Button>
-                                    <Button onClick={handleSubmit} color="primary">Lisaaaaaaacccct it</Button>
+                                    <Button onClick={handleSubmit} color="primary">Lisaaaaazzzbbbbaacccct it</Button>
                                 </ModalFooter>
                             </>
                         )}

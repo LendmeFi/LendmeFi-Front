@@ -29,7 +29,7 @@ interface Props {
     isOpen: boolean;
     onOpenChange: () => void;
     currentNft: ListingDetails;
-    picture: { [key: string]: string };
+    picture: string[];
 }
 
 const MyModal: React.FC<ModalProps> = ({ children, backdrop, isOpen, onOpenChange }) => {
