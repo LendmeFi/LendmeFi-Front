@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Modal,
     ModalContent,
@@ -18,15 +18,36 @@ import { ListingDetails } from "@/types/lendingDetails";
 import { ethers } from "ethers";
 import nftAbi from "@/context/ContractAbi";
 
+interface ModalProps {
+    children: React.ReactNode;
+    backdrop: 'blur';
+    isOpen: boolean;
+    onOpenChange: () => void;
+}
+
 interface Props {
     isOpen: boolean;
     onOpenChange: () => void;
-    picture: string[];
     currentNft: ListingDetails;
+    picture: { [key: string]: string };
 }
 
-const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
+const MyModal: React.FC<ModalProps> = ({ children, backdrop, isOpen, onOpenChange }) => {
+    const modalStyles = {
+        width: '80%', // Change the width here
+        maxWidth: '500px',
+    };
+
+    return (
+        <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange} style={modalStyles}>
+            {children}
+        </Modal>
+    );
+};
+
+const UIModal: React.FC<Props> = ({ isOpen, onOpenChange, currentNft, picture }) => {
     const [nftName, setNftName] = useState<string>("");
+
     async function fetchNftName(currentNft?: ListingDetails) {
         if (!currentNft) return;
         const ethersProvider = new ethers.JsonRpcProvider(
@@ -41,9 +62,11 @@ const UIModal = ({ isOpen, onOpenChange, currentNft, picture }: Props) => {
         setNftName(nftName);
         console.log("nftName", nftName);
     }
+
     useEffect(() => {
         fetchNftName(currentNft);
     }, [currentNft]);
+
     return (
         <>
             <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
