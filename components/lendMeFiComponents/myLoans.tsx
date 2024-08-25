@@ -183,10 +183,12 @@ const myLoans: React.FC = () => {
         const [nftName, setNftName] = useState<string>("");
         const [loanStatusById, setLoanStatusById] = useState(0);
         const [userAddress, setUserAddress] = useState<string>("");
+        const [signer, setSigner] = useState<ethers.Signer>();
 
         useEffect(() => {
             const fetchSignerAndAddress = async () => {
                 const signer = await wProvider.getSigner();
+                setSigner(signer);
                 const userAddress = await signer.getAddress();
                 setUserAddress(userAddress);
                 const lendmeFiContractAddress = "0x201c11d25F3590De65DD72177D1f4AD364da1d3e";
@@ -229,12 +231,21 @@ const myLoans: React.FC = () => {
 
         }, [currentNft]);
 
+        let lendmeFiContractSigner = new ethers.Contract(
+            lendmeFiContractAddress,
+            Contract_Function_Abi,
+            signer,
+        );
+
         const sumbitTx = async () => {
             if (currentNft.borrowerAddress.toString() === userAddress.toString()) {
                 const repayment = async () => {
-                    const tx = await lendmeFiContract.repayLoan(currentNft.loanId);
+                    if (!signer) return;
+                    const tx = await lendmeFiContractSigner.repayLoan(currentNft.loanId);
                     await tx.wait();
                     setShowToast(true);
+                    setToastMessage(`Loan Repaid Successfully ${tx.hash}`);
+                    console.log(tx);
                     handleShowToast();
                 };
                 repayment();
@@ -242,9 +253,12 @@ const myLoans: React.FC = () => {
 
             if (currentNft.lenderAddress.toString() === userAddress.toString()) {
                 const liquidate = async () => {
-                    const tx = await lendmeFiContract.liquidateLoan(currentNft.loanId);
+                    if (!signer) return;
+                    const tx = await lendmeFiContractSigner.liquidateLoan(currentNft.loanId);
                     await tx.wait();
                     setShowToast(true);
+                    setToastMessage(`Loan Liquidated Successfully ${tx.hash}`);
+                    console.log(tx);
                     handleShowToast();
                 };
                 liquidate();
