@@ -94,12 +94,13 @@ const NftTable: React.FC = () => {
                 // first fetch NFT data
                 const data = await getAllNftListings();
                 setNftData(data);
+                console.log("dataasdasdasdasdasdasdsad: ", data);
 
                 // then fetch NFT pictures
                 const pictures = await Promise.all(
                     data.map(async (nft) => {
                         console.log(
-                            "nftttttttttttt: ",
+
                             nft.nftCollateralAddress,
                             nft.nftTokenId,
                         );
@@ -110,7 +111,7 @@ const NftTable: React.FC = () => {
                     }),
                 );
                 setNftPicture(pictures);
-                console.log("nftPicture: ", pictures);
+
             } catch (error: any) {
                 console.error(
                     "Error fetching data or pictures: ",
@@ -167,7 +168,7 @@ const NftTable: React.FC = () => {
                             </TableCell>
                             <TableCell>
                                 <Button onPress={() => handleOnPress(nft)}>
-                                    Lend
+                                    Go to Details
                                 </Button>
                             </TableCell>
                         </TableRow>

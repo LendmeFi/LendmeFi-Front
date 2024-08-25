@@ -152,8 +152,8 @@ const myList: React.FC = () => {
                         </TableCell>
                         <TableCell>{`${nft.nftCollateralAddress.slice(0, 6)}...${nft.nftCollateralAddress.slice(-4)}`}</TableCell>
                         <TableCell>{nft.nftTokenId}</TableCell>
-                        <TableCell>{ethers.formatEther(nft.loanAmount)} ETH</TableCell>
-                        <TableCell> {ethers.formatEther(nft.interestFee)} ETH</TableCell>
+                        <TableCell>{nft.loanAmount} ETH</TableCell>
+                        <TableCell> {nft.interestFee} ETH</TableCell>
                         <TableCell>{nft.loanDuration / 3600} hours</TableCell>
                         <TableCell><Button onPress={() => handleOnPress(nft)}>Cancel it</Button>
                             {/* <UIModal

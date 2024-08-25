@@ -41,15 +41,18 @@ async function getAllNftListings(): Promise<ListingDetails[]> {
         const nftListingCollectionRef = collection(db, 'nft-listing');
         const walletAddressesSnapshot: QuerySnapshot = await getDocs(nftListingCollectionRef);
 
-        for (const walletDoc of walletAddressesSnapshot.docs) {
+        const nftPromises = walletAddressesSnapshot.docs.map(async (walletDoc) => {
             const walletAddress = walletDoc.id;
             const nftCollectionRef = collection(db, 'nft-listing', walletAddress, 'id');
             const nftDocsSnapshot: QuerySnapshot = await getDocs(nftCollectionRef);
-
+            
             nftDocsSnapshot.forEach((nftDoc) => {
                 nftListings.push(nftDoc.data() as ListingDetails);
+                console.log("AAAAAAAAAAAAAAAAAAAA" , nftDoc.data());
             });
-        }
+        });
+
+        await Promise.all(nftPromises);
     } catch (e) {
         console.error('Error getting documents: ', e);
     }

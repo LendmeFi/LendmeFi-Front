@@ -224,8 +224,8 @@ const myNfts: React.FC = () => {
                 borrowerAddress: userAddress,
                 borrowerNonce: userNonce as number,
                 borrowerSignature: signature,
-                interestFee: interestFee.toString(),
-                loanAmount: loanAmount.toString(),
+                interestFee: Number(interestFee),
+                loanAmount: Number(loanAmount),
                 loanDuration: Number(loanDuration),
                 loanTokenAddress: loanTokenAddress1,
                 nftCollateralAddress: currentNft.nftCollateralAddress,
@@ -235,9 +235,12 @@ const myNfts: React.FC = () => {
             if (submitListing) {
                 console.log("Listed successfully");
                 console.log("sign: ", signature);
+                alert("Listed successfully");
             } else {
+                alert("Error listing");
                 console.log("Error listing");
             }
+            isOpen = false;
         };
 
         async function fetchNftName(currentNft?: nftData) {
